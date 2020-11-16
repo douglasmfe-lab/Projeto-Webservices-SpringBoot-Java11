@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 
 import com.douglasmfe.webservices.model.User;
 import com.douglasmfe.webservices.repositories.UserRepository;
+import com.douglasmfe.webservices.services.exceptions.ResourceNotFoundException;
 
 @Service
 public class UserService {
@@ -21,10 +22,9 @@ public class UserService {
 		return repo.findAll();
 	}
 	
-
 	public User findById(Long id){
 		Optional<User> obj = repo.findById(id);
-		return obj.get();
+		return obj.orElseThrow(() -> new ResourceNotFoundException(id));
 	}	
 	
 	public User Insert(User obj) {
