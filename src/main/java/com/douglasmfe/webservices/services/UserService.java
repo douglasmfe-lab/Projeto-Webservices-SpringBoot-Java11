@@ -3,6 +3,8 @@ package com.douglasmfe.webservices.services;
 import java.util.List;
 import java.util.Optional;
 
+import javax.persistence.EntityNotFoundException;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -48,9 +50,14 @@ public class UserService {
 	}
 	
 	public User update(Long id, User obj) {
+		try {
 		User entity = repo.getOne(id);
 		updateData(entity, obj);
 		return repo.save(entity);
+		}
+		catch(EntityNotFoundException e){
+			throw new ResourceNotFoundException(id);
+		}
 	}
 
 
